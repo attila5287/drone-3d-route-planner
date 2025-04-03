@@ -202,21 +202,22 @@ function handlerShowPanelGeo(e) {
 $showPanelGeo.addEventListener("change", handlerShowPanelGeo);
 
 
-$showPanelCoords.addEventListener( "change", handlerShowPanelGeo );
+$showPanelCoords.addEventListener( "change", handlerShowPanelCoords );
 function handlerShowPanelCoords(e) {
   // e.target is the SWITCH element
   console.log("clk target:>> " + e.target.dataset.target);
   console.log("clk on>> " + e.target.id + " chk stat>> " + e.target.checked);
-
+  // animate__animated animate__delay-3s overlay bg-transparent px-1 py-0 animate__slideInRight
   const isChecked = e.target.checked;
   // el is the DATA-TARGET ELEMENT that needs to be
   const el = document.getElementById(e.target.dataset.target);
   if (!isChecked) {
-    el.classList.remove("animate__slideInLeft");
-    el.classList.add("animate__fadeOutLeftBig");
+    el.classList.remove("animate__delay-3s");
+    el.classList.remove("animate__slideInRight");
+    el.classList.add("animate__fadeOutRightBig");
   } else {
-    el.classList.remove("animate__fadeOutLeftBig");
-    el.classList.add("animate__slideInLeft");
+    el.classList.remove("animate__fadeOutRightBig");
+    el.classList.add("animate__slideInRight");
   }
 }
 // #region base config and public key token
