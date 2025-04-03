@@ -8,9 +8,6 @@
 			"path": "../map/JS_three/mapbox"
 		},
 		{
-			"path": "../map/mongodb-atlas-heroku-leaflix-demo-master"
-		},
-		{
 			"path": "../bootcampJS/mongobudget"
 		}
 	],

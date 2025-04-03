@@ -55,7 +55,8 @@ export const geometricRoute = (poly, userInput) => {
     });
     return turf.polygonSmooth(simplified, { iterations: 3 });
   }
-  const smoother = smootherPoly(poly);
+  const smoother = smootherPoly( poly );
+  const indexOfLastFeat = smoother.features.length - 1;
 
   for (let indxLoop = 0; indxLoop < inStepCount; indxLoop++) {
     let elevBase = indxLoop * stepHeight + inBaseHi;
@@ -84,7 +85,9 @@ export const geometricRoute = (poly, userInput) => {
       let rev = [];
       let coords = [];
       let distArray = [];
-      coords = smoother.features[0].geometry.coordinates.flatMap((d) => d);
+      coords = smoother.features[indexOfLastFeat].geometry.coordinates.flatMap(
+        (d) => d
+      );
       rev = [...coords].reverse();
       function distanceFromCoords(cors) {
         // console.log( cors )
@@ -105,7 +108,9 @@ export const geometricRoute = (poly, userInput) => {
       }
       // FIXME only works with [0]th polygon
       feat.properties.distFromStart = distanceFromCoords(
-        smoother.features[0].geometry.coordinates.flatMap((d) => d)
+        smoother.features[indexOfLastFeat].geometry.coordinates.flatMap(
+          (d) => d
+        )
       );
       distArray = feat.properties.distFromStart;
 

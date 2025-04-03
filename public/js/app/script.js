@@ -1,6 +1,13 @@
 import { geometricRoute } from "./geometricRoute.js";
 import { testpoly } from "./testdata.js";
 
+// const positionMap = [-104.9889, 39.7394]; // denver
+const positionMap = {
+  lng: "-104.9889",
+  lat: "39.7394"
+}; // denver
+
+console.log(positionMap)
 const $duskMode = document.querySelector("#duskModeCkbox");
 const $camControls = document.querySelector("#navCamControls");
 const $disableCamControls = document.querySelector("#disableCamControls");
@@ -14,17 +21,54 @@ const $camCheckBoxes = document.querySelectorAll(".camCheckBox");
 const $showPanelCam = document.querySelector("#show-panel-cam");
 const $geoInputs = document.querySelectorAll( ".geo-input-el" );
 const $showPanelCoords = document.querySelector("#show-panel-coords");
+const $buttonCoords = document.querySelector("#map-coords-button");
+const $messageBox = document.querySelector("#message-box");
 
+function fetchCoordsInput() {
+  return [
+    +document.querySelector("#map-coords-lng").value,
+     +document.querySelector("#map-coords-lat").value,
+  ]
+}
+$buttonCoords.addEventListener( "click", ( e ) => {
+  e.preventDefault();
+  console.log("map-coords-button clicked")
+  console.log(fetchCoordsInput());
+  map.flyTo( {
+    zoom: 19,
+    center: fetchCoordsInput(),
+    essential: true, // this animation is considered essential with respect to prefers-reduced-motion
+  } );
+  if ( e.target.dataset.selected === "primary" ) {
+    e.target.dataset.selected = "alt";
+    document.querySelector("#map-coords-lng").value =
+      document.querySelector("#map-coords-lng").dataset.alt;
+    document.querySelector("#map-coords-lat").value =
+      document.querySelector( "#map-coords-lat" ).dataset.alt;
+    document.querySelector( ".map-coords-button-icon" ).innerHTML = '';
+    document.querySelector(".map-coords-button-icon").innerHTML = `<i class="fas fa-fw fa-undo"</i>`;
+    
+  } else {
+    e.target.dataset.selected = "primary";
+    document.querySelector("#map-coords-lng").value =
+    document.querySelector("#map-coords-lng").dataset.primary;
+    document.querySelector("#map-coords-lat").value =
+    document.querySelector("#map-coords-lat").dataset.primary;
+    document.querySelector(".map-coords-button-icon").innerHTML = `<i class="fas fa-fw fa-plane-departure"</i>`;
+    
+  }
+  
 
+})
+  
 const userBaseHeight  = document.querySelector("#user-base-height");
 const userTopHeight  = document.querySelector("#user-top-height");
 const userStepCount  = document.querySelector("#user-step-count");
 const userToleranceW  = document.querySelector("#user-tolerance-w");
 
-
-
 // ----------------
-let fetchUserInput= () => {return {
+const fetchUserInput= () => {
+  return {
   inBaseHi:        userBaseHeight.value * 1,
   inTopHi:         userTopHeight.value  * 1,
   inStepCount:     userStepCount.value  * 1,
@@ -147,33 +191,35 @@ function handlerShowPanelGeo( e ) {
      // el is the DATA-TARGET ELEMENT that needs to be
      const el = document.getElementById(e.target.dataset.target);
      if (!isChecked) {
-       el.classList.remove("animate__slideInLeft");
-       el.classList.add("animate__fadeOutLeftBig");
+       el.classList.remove("animate__delay-3s");
+       el.classList.remove("animate__slideInRight");
+       el.classList.add("animate__fadeOutRightBig");
      } else {
-       el.classList.remove("animate__fadeOutLeftBig");
-       el.classList.add("animate__slideInLeft");
-     }
-}
-function handlerShowPanelGeoInfo( e ) {
-     // e.target is the SWITCH element
-     console.log("clk target:>> " + e.target.dataset.target);
-     console.log("clk on>> " + e.target.id + " chk stat>> " + e.target.checked);
-
-     const isChecked = e.target.checked;
-     // el is the DATA-TARGET ELEMENT that needs to be
-     const el = document.getElementById(e.target.dataset.target);
-     if (!isChecked) {
-       el.classList.remove("animate__slideInLeft");
-       el.classList.add("animate__fadeOutLeftBig");
-     } else {
-       el.classList.remove("animate__fadeOutLeftBig");
-       el.classList.add("animate__slideInLeft");
+       el.classList.remove("animate__fadeOutRightBig");
+       el.classList.add( "animate__slideInRight" );
      }
 }
 
 $showPanelGeo.addEventListener("change", handlerShowPanelGeo);
 
-$showPanelGeo.addEventListener("change", handlerShowPanelGeoInfo);
+
+$showPanelCoords.addEventListener( "change", handlerShowPanelGeo );
+function handlerShowPanelCoords(e) {
+  // e.target is the SWITCH element
+  console.log("clk target:>> " + e.target.dataset.target);
+  console.log("clk on>> " + e.target.id + " chk stat>> " + e.target.checked);
+
+  const isChecked = e.target.checked;
+  // el is the DATA-TARGET ELEMENT that needs to be
+  const el = document.getElementById(e.target.dataset.target);
+  if (!isChecked) {
+    el.classList.remove("animate__slideInLeft");
+    el.classList.add("animate__fadeOutLeftBig");
+  } else {
+    el.classList.remove("animate__fadeOutLeftBig");
+    el.classList.add("animate__slideInLeft");
+  }
+}
 // #region base config and public key token
 mapboxgl.accessToken =
   "pk.eyJ1IjoiYXR0aWxhNTIiLCJhIjoiY2thOTE3N3l0MDZmczJxcjl6dzZoNDJsbiJ9.bzXjw1xzQcsIhjB_YoAuEw";
@@ -190,7 +236,8 @@ const map = new mapboxgl.Map({
   config: baseConfig,
   zoom: 18.93,
   bearing: 150,
-  center: [-104.9889, 39.7394], // `civic`
+  center: positionMap, // `civic`
+  // center: [ 27.1428, 38.423733, ], // izmir
   pitch: 60,
   antialias: true,
 });
@@ -565,11 +612,45 @@ map.on("style.load", () => {
     layout: layoutLine,
     paint: paintLine,
   });
+  map.on("moveend", () => {
+    const mapCenter = map.getCenter();
+    const isMapAway = () => {
+      const isLngAway = Math.abs(+mapCenter.lng - positionMap.lng) > 0.5;
+      const isLatAway = Math.abs(+mapCenter.lat - positionMap.lat) > 0.5;
+      if (isLatAway ) {
+        if (isLngAway) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    };
+    if ( isMapAway() ) {
+      console.log( 'is Map Away TRUE' );
+      console.log(`Map Lng: ${mapCenter.lng}, Lat: ${mapCenter.lat}`);
+      document.querySelector("#map-coords-lng").value =
+        document.querySelector("#map-coords-lng").dataset.alt;
+
+      document.querySelector("#map-coords-lat").value =
+        document.querySelector("#map-coords-lat").dataset.alt;
+      document.querySelector(
+        ".map-coords-button-icon"
+      ).innerHTML = `<i class="fas fa-fw fa-undo"></i>`;
+    }
+
+
+  });
 
   map.on("load", function () {
     map.addControl(
       new mapboxgl.Minimap({
-        center: [-104.9889, 39.7394], // Civic
+        // center: positionMap, // Civic
+        center: [
+          +positionMap.lng,
+          +positionMap.lat,
+        ], // Civic
         zoom: 12,
       }),
       "bottom-right"

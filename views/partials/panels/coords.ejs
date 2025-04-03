@@ -1,34 +1,44 @@
 <!-- C O O R D S   M A P   P A N E L -->
 <div id="coords-map-panel"
-    class="animate__animated animate__slideInRight animate__delay-3s overlay  bg-transparent px-1 py-0">
+    class="animate__animated animate__slideInRight animate__delay-3s overlay bg-transparent px-1 py-0">
     <div class="form-group mb-1">
         <label for="map-coords-lat">
-            <i class="fas fa-globe"></i>
-            <i class="fas fa-arrows-alt-h"></i>
+            <i class="fas fa-fw fa-map-location-dot"></i>
+            <i class="fas fa-fw fa-arrows-alt-h"></i>
             <i class="text-info">
                 Lat
             </i>
         </label>
         <input type="text" name="" id="map-coords-lat"
-            class="add-anime-white bg-transparent border-secondary text-secondary form-control form-control-sm mb-0 text-sm"
-            value="41.3040">
+            class="add-anime-white bg-transparent border-secondary text-info form-control form-control-sm mb-0 text-sm"
+            value="38.4237"
+            data-primary="38.4237"
+            data-alt    ="39.7394"
+            >
     </div>
     <div class="form-group mb-1">
         <label for="map-coords-lng">
-            <i class="fas fa-globe"></i>
-            <i class="fas fa-arrows-alt-v"></i>
-            <i class="text-info">
-                Lng </i>
+            <i class="fas fa-fw fa-map-location-dot"></i>
+            <i class="fas fa-fw fa-arrows-alt-v"></i>
+            <i class="text-info">Lng </i>
         </label>
         <input type="text" id="map-coords-lng"
-            class="add-anime-white bg-transparent border-secondary text-secondary form-control form-control-sm mb-0 text-sm"
-            value="41.8180">
+            class="add-anime-white bg-transparent border-secondary text-info form-control form-control-sm mb-0 text-sm"
+            data-primary="27.1428"
+            data-alt="-104.9889"
+            value="27.1428"
+            >
     </div>
     <div class="form-group">
-        <button id="map-coords-button"
-            class="btn btn-primary text-info btn-block py-0 add-anime"
+        <a id="map-coords-button"
+            class="btn btn-primary text-info btn-block py-0 add-anime text-sm"
+            data-selected="primary"
+            data-primary="fas fa-fw fa-plane-departure"
+            data-alt="fas fa-fw fa-undo"
             type="button">
-            <i class="fas fa-map-location-dot"></i>
-        </button>
+            <span class="map-coords-button-icon">
+                <i class="fas fa-fw fa-plane-departure"></i>
+            </span>
+        </a>
     </div>
 </div>
