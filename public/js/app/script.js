@@ -37,10 +37,10 @@ function setTime() {
     `<i class="fas fa-fw fa-draw-polygon"></i>`,
   ];
   const instructionsText = [
-    "Start by clicking the polygon icon",
-    "Select base(s) to move, delete, combine",
+    "*Start by clicking the polygon icon*",
+    "Select base(s) to move,del,(un)combine",
     "Combine bases only if overlapping",
-    "Click on user-drawn polygon to  edit",
+    "Dbl clk to edit user-drawn base",
   ];
   let currentIndex = 0;
   let secondsLeft = 3;
@@ -48,18 +48,18 @@ function setTime() {
 
   const timerInterval = setInterval( function () {
     const secondsIcons = [
-      `<i class="opac-100 fas fa-fw fa-circle-notch"></i>`,
-      `<i class="opac-75 fas fa-fw fa-circle-notch fa-rotate-90"></i>`,
-      `<i class="opac-50 fas fa-fw fa-circle-notch fa-rotate-180"></i>`,
-      `<i class="opac-25 fas fa-fw fa-circle-notch fa-rotate-270"></i>`,
+      `<i class="opac-50 fas fa-fw fa-ellipsis-v fa-rotate-90"></i>`,
+      `<i class="opac-25 fas fa-fw fa-ellipsis-v"></i>`,
+      `<i class="opac-0 fas fa-fw fa-ellipsis-v fa-rotate-90"></i>`,
+      `<i class="fas fa-fw fa-ellipsis-v"></i>`,
     ];
-    console.log("secondsLeft :>> ", secondsLeft);
+    // console.log("secondsLeft :>> ", secondsLeft);
     $seconds.textContent = secondsLeft;
     $secondsIcon.innerHTML = '';
     $secondsIcon.innerHTML = secondsIcons[3-secondsLeft];
 
     if (secondsLeft === 0) {
-      console.log("next item");
+      // console.log("next item");
       currentIndex++;
 
       if (currentIndex >= instructionsText.length) {
