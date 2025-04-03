@@ -2,7 +2,7 @@
   "name": "node-js-getting-started",
   "description": "A sample Node.js app using Express",
   "engines": {
-    "node": "22.4"
+    "node": "20.x"
   },
   "main": "index.js",
   "scripts": {

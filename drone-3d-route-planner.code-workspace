@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"name": "drone-3d-route-planner",
+			"path": "."
+		},
+		{
+			"path": "../map/JS_three/mapbox"
+		},
+		{
+			"path": "../map/mongodb-atlas-heroku-leaflix-demo-master"
+		},
+		{
+			"path": "../bootcampJS/mongobudget"
+		}
+	],
+	"settings": {}
+}
