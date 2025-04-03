@@ -1,10 +1,12 @@
 <div class="calculation-box py-0 animate__animated animate__slideInUp animate__delay-2s"
     style="z-index: 2; position: absolute;">
-    <div class="text-center  animate__animated animate__infinite  animate__pulse mb-1"
+    <div class="animate__animated animate__infinite  animate__pulse mb-1"
         style="vertical-align: middle;">
-        <i> Click polygon icon to start drawing </i>
-        <i
-            class="fas fa-vector-square text-lg bg-light text-primary p-1 rounded-sm"></i>
+        <span id="seconds" class="d-none"></span>
+        <span id="secondsIcon"></span>
+        <span id="instructions-icon" class="text-lg bg-light text-primary px-1 py-0 rounded-sm mr-1">
+        </span>
+        <i id="instructions-text" class="text-sm"> Click polygon icon to start drawing </i>
     </div>
     <div class="list-group list-group-horizontal text-xl">
         <a href="#"

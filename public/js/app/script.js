@@ -1,13 +1,5 @@
 import { geometricRoute } from "./geometricRoute.js";
 import { testpoly } from "./testdata.js";
-
-// const positionMap = [-104.9889, 39.7394]; // denver
-const positionMap = {
-  lng: "-104.9889",
-  lat: "39.7394"
-}; // denver
-
-console.log(positionMap)
 const $duskMode = document.querySelector("#duskModeCkbox");
 const $camControls = document.querySelector("#navCamControls");
 const $disableCamControls = document.querySelector("#disableCamControls");
@@ -23,6 +15,73 @@ const $geoInputs = document.querySelectorAll( ".geo-input-el" );
 const $showPanelCoords = document.querySelector("#show-panel-coords");
 const $buttonCoords = document.querySelector("#map-coords-button");
 const $messageBox = document.querySelector("#message-box");
+const $instructionsText = document.querySelector("#instructions-text");
+const $instructionsIcon = document.querySelector("#instructions-icon");
+
+
+const positionMap = {
+  lng: "-104.9889",
+  lat: "39.7394"
+}; // denver civic
+// console.log(positionMap)
+
+$instructionsIcon;
+function setTime() {
+  const $seconds = document.getElementById("seconds");
+  const $secondsIcon = document.getElementById("secondsIcon");
+  
+  const instructionsIcons = [
+    `<i class="fas fa-fw fa-vector-square"></i>`,
+    `<i class="fas fa-fw fa-trash-alt"></i>`,
+    `<i class="far fa-fw fa-clone fa-rotate-270"></i>`,
+    `<i class="fas fa-fw fa-draw-polygon"></i>`,
+  ];
+  const instructionsText = [
+    "Start by clicking the polygon icon",
+    "Select base(s) to move, delete, combine",
+    "Combine bases only if overlapping",
+    "Click on user-drawn polygon to  edit",
+  ];
+  let currentIndex = 0;
+  let secondsLeft = 3;
+  
+
+  const timerInterval = setInterval( function () {
+    const secondsIcons = [
+      `<i class="opac-100 fas fa-fw fa-circle-notch"></i>`,
+      `<i class="opac-75 fas fa-fw fa-circle-notch fa-rotate-90"></i>`,
+      `<i class="opac-50 fas fa-fw fa-circle-notch fa-rotate-180"></i>`,
+      `<i class="opac-25 fas fa-fw fa-circle-notch fa-rotate-270"></i>`,
+    ];
+    console.log("secondsLeft :>> ", secondsLeft);
+    $seconds.textContent = secondsLeft;
+    $secondsIcon.innerHTML = '';
+    $secondsIcon.innerHTML = secondsIcons[3-secondsLeft];
+
+    if (secondsLeft === 0) {
+      console.log("next item");
+      currentIndex++;
+
+      if (currentIndex >= instructionsText.length) {
+        currentIndex = 0; // Restart from the first element
+      }
+
+      $instructionsText.textContent = instructionsText[currentIndex];
+      $instructionsIcon.innerHTML = "";
+      $instructionsIcon.innerHTML = instructionsIcons[currentIndex];
+      secondsLeft = 3; // Reset the countdown for the next item
+    } else {
+      secondsLeft--;
+    }
+  }, 1000);
+
+  // Initialize the first text
+  $instructionsText.textContent = instructionsText[currentIndex];
+  $instructionsIcon.innerHTML = '';
+  console.log(instructionsIcons[currentIndex]);
+  $instructionsIcon.innerHTML = instructionsIcons[currentIndex];
+}
+setTime();
 
 function fetchCoordsInput() {
   return [
@@ -261,6 +320,8 @@ map.addControl(draw);
 map.on("draw.create", updateArea);
 map.on("draw.delete", updateArea);
 map.on("draw.update", updateArea);
+map.on("draw.combine", updateArea);
+map.on("draw.uncombine", updateArea);
 // #endregion
 // #region enable disable dusk mode
 function handlerDuskMode(e) {
