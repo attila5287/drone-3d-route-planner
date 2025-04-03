@@ -182,22 +182,21 @@ $geoInputs.forEach((inputEl) =>
     inputEl.addEventListener( "change", handlerGeo )
 );
 
-function handlerShowPanelGeo( e ) {
-     // e.target is the SWITCH element
-     console.log("clk target:>> " + e.target.dataset.target);
-     console.log("clk on>> " + e.target.id + " chk stat>> " + e.target.checked);
+function handlerShowPanelGeo(e) {
+  // e.target is the SWITCH element
+  console.log("clk target:>> " + e.target.dataset.target);
+  console.log("clk on>> " + e.target.id + " chk stat>> " + e.target.checked);
 
-     const isChecked = e.target.checked;
-     // el is the DATA-TARGET ELEMENT that needs to be
-     const el = document.getElementById(e.target.dataset.target);
-     if (!isChecked) {
-       el.classList.remove("animate__delay-3s");
-       el.classList.remove("animate__slideInRight");
-       el.classList.add("animate__fadeOutRightBig");
-     } else {
-       el.classList.remove("animate__fadeOutRightBig");
-       el.classList.add( "animate__slideInRight" );
-     }
+  const isChecked = e.target.checked;
+  // el is the DATA-TARGET ELEMENT that needs to be
+  const el = document.getElementById(e.target.dataset.target);
+  if (!isChecked) {
+    el.classList.remove("animate__slideInLeft");
+    el.classList.add("animate__fadeOutLeftBig");
+  } else {
+    el.classList.remove("animate__fadeOutLeftBig");
+    el.classList.add("animate__slideInLeft");
+  }
 }
 
 $showPanelGeo.addEventListener("change", handlerShowPanelGeo);
