@@ -14,26 +14,93 @@ const $showPanelCam = document.querySelector("#show-panel-cam");
 const $geoInputs = document.querySelectorAll( ".geo-input-el" );
 const $showPanelCoords = document.querySelector("#show-panel-coords");
 const $buttonCoords = document.querySelector("#map-coords-button");
-const $messageBox = document.querySelector("#message-box");
 const $instructionsText = document.querySelector("#instructions-text");
 const $instructionsIcon = document.querySelector("#instructions-icon");
+const $messageText = document.querySelector("#message-text");
+const $messageBox = document.querySelector("#message-box");
+const $messageButton = document.querySelector(".message-button");
+const $navIcons = document.querySelectorAll(".nav-icon");
 
 
 const positionMap = {
   lng: "-104.9889",
   lat: "39.7394"
-}; // denver civic
+}; // denver civics 
 // console.log(positionMap)
+setTimeMessagebox();
+$messageButton.addEventListener( 'click', ( e ) => {
+  console.log("$messageButton clicked");
+  $messageBox.classList.remove("d-none");
+  setTimeMessagebox();
+});
+function setTimeMessagebox() {
+  let currentIndex = 0;
+  let secondsLeft = 2;
+  const intros = [];
+  // Populate the intros array with data-intro values
+  $navIcons.forEach((el) => intros.push(el.dataset.intro));
 
-$instructionsIcon;
-function setTime() {
+  let lapCount = 0;
+
+  const timerInterval = setInterval(function () {
+    // Decrement the countdown timer
+    if (secondsLeft === 0) {
+      // Remove 'text-info' and animation classes from all elements
+      $navIcons.forEach((el) => {
+        el.classList.remove("text-info");
+        el.classList.remove("animate__animated");
+        el.classList.remove("animate__tada");
+      });
+
+      // Move to the next item
+      currentIndex++;
+
+      // If the currentIndex exceeds the array length, reset it
+      if (currentIndex >= intros.length) {
+        lapCount++;
+        if (lapCount === 1) {
+          console.log( "clearing interval at lap count: " + lapCount );
+          $messageText.textContent = '';
+          $messageBox.classList.remove( 'animate__delay-3s' );
+          $messageBox.classList.add( 'd-none' );
+          
+          clearInterval( timerInterval );
+
+          return; // Exit the function to avoid further execution
+        }
+        currentIndex = 0; // Restart from the first element
+      }
+
+      // Add 'text-info' and animation classes to the current element
+      $navIcons[currentIndex].classList.add("text-info");
+      $navIcons[currentIndex].classList.add("animate__animated");
+      $navIcons[currentIndex].classList.add("animate__tada");
+
+      // Update the message text
+      $messageText.textContent = intros[currentIndex];
+
+      console.log($navIcons[currentIndex].dataset.intro);
+
+      // Reset the countdown timer for the next item
+      secondsLeft = 2;
+    } else {
+      secondsLeft--;
+    }
+  }, 1000);
+
+  // Initialize the first text and highlight the first element
+  $navIcons.forEach((el) => el.classList.remove("text-info")); // Ensure no element is highlighted initially
+  $navIcons[currentIndex].classList.add("text-info");
+  $messageText.textContent = intros[currentIndex];
+}
+function setTimeInstructions() {
   const $seconds = document.getElementById("seconds");
   const $secondsIcon = document.getElementById("secondsIcon");
-  
+
   const instructionsIcons = [
     `<i class="fas fa-fw fa-vector-square"></i>`,
     `<i class="fas fa-fw fa-trash-alt"></i>`,
-    `<i class="far fa-fw fa-clone fa-rotate-270"></i>`,
+    `<i class="far fa-fw fa-object-ungroup"></i>`,
     `<i class="fas fa-fw fa-draw-polygon"></i>`,
   ];
   const instructionsText = [
@@ -44,19 +111,18 @@ function setTime() {
   ];
   let currentIndex = 0;
   let secondsLeft = 3;
-  
 
-  const timerInterval = setInterval( function () {
+  const timerInterval = setInterval(function () {
     const secondsIcons = [
-      `<i class="opac-50 fas fa-fw fa-ellipsis-v fa-rotate-90"></i>`,
-      `<i class="opac-25 fas fa-fw fa-ellipsis-v"></i>`,
-      `<i class="opac-0 fas fa-fw fa-ellipsis-v fa-rotate-90"></i>`,
-      `<i class="fas fa-fw fa-ellipsis-v"></i>`,
+      `<i class="opac-75 fas fa-fw fa-grip-vertical fa-rotate-90"></i>`,
+      `<i class="opac-50 fas fa-fw fa-ellipsis-v"></i>`,
+      `<i class="opac-25 fas fa-fw fa-ellipsis-v fa-rotate-90"></i>`,
+      `<i class="fas fa-fw fa-grip-vertical"></i>`,
     ];
     // console.log("secondsLeft :>> ", secondsLeft);
     $seconds.textContent = secondsLeft;
-    $secondsIcon.innerHTML = '';
-    $secondsIcon.innerHTML = secondsIcons[3-secondsLeft];
+    $secondsIcon.innerHTML = "";
+    $secondsIcon.innerHTML = secondsIcons[3 - secondsLeft];
 
     if (secondsLeft === 0) {
       // console.log("next item");
@@ -77,11 +143,11 @@ function setTime() {
 
   // Initialize the first text
   $instructionsText.textContent = instructionsText[currentIndex];
-  $instructionsIcon.innerHTML = '';
+  $instructionsIcon.innerHTML = "";
   console.log(instructionsIcons[currentIndex]);
   $instructionsIcon.innerHTML = instructionsIcons[currentIndex];
 }
-setTime();
+setTimeInstructions();
 
 function fetchCoordsInput() {
   return [

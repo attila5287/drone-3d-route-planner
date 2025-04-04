@@ -314,16 +314,12 @@ line-height: 1.75em;
   transform: rotate(45deg);
 }
 #message-box {
-  display: table;
   position: absolute;
+  height: 20px;
   top: 34px;
   left: 50%;
   transform: translateX(-50%);
-  word-wrap: anywhere;
-  white-space: pre-wrap;
-  padding: 1px;
   border: none;
-  border-radius: 3px;
   font-family: Ubuntu;
   text-align: center;
   z-index: 1;
